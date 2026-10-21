@@ -52,6 +52,11 @@ class PrivacyShield:
 
             sanitized_text = sanitized_text[:res.start] + placeholder + sanitized_text[res.end:]
 
+        # Extra safety pass: ensure any duplicate exact text matches (like repeated names) are also caught
+        for original_val, placeholder in self.forward_map.items():
+            if original_val in sanitized_text:
+                sanitized_text = sanitized_text.replace(original_val, placeholder)
+
         # Output needed by Member 4 for the Privacy Audit Log UI
         audit_data = {
             "raw_input": raw_text,
