@@ -1,0 +1,64 @@
+/* ==========================================================================
+   RecallOS — Core Design Tokens & Theme Variables
+   Nebius x NVIDIA Global AI Hackathon 2026 (Personal AI Track)
+   Theme Rules:
+     1. Grey Canvas: #282828
+     2. Smoky Glass: #181818 / 84% opacity (rgba(24, 24, 24, 0.84))
+     3. Typography: #FFFFFF (White)
+     4. Zero Bare-Canvas Text: All typography enclosed in smoky glass surfaces
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Canvas & Glass Surfaces */
+  --canvas-grey: #282828;
+  --smoky-glass: rgba(24, 24, 24, 0.84);
+  --smoky-glass-solid: #181818;
+  --smoky-glass-hover: rgba(32, 32, 32, 0.94);
+  --smoky-glass-dark: rgba(14, 14, 14, 0.96);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-highlight: rgba(255, 255, 255, 0.32);
+  --glass-border-focus: rgba(118, 185, 0, 0.5);
+  --glass-blur: blur(24px);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --text-white: #FFFFFF;
+  --text-muted: #A3A3A3;
+  --text-dim: #737373;
+
+  /* NVIDIA Brand Palette */
+  --nvidia-green: #76B900;
+  --nvidia-green-bright: #8AE000;
+  --nvidia-green-dark: #3E6300;
+  --nvidia-green-glow: rgba(118, 185, 0, 0.4);
+
+  /* Nebius Brand Palette */
+  --nebius-violet: #6366F1;
+  --nebius-violet-bright: #818CF8;
+  --nebius-violet-dark: #3730A3;
+  --nebius-violet-glow: rgba(99, 102, 241, 0.4);
+
+  /* Privacy & Safety Accents */
+  --cyan-pii: #06B6D4;
+  --cyan-pii-bright: #22D3EE;
+  --cyan-pii-dark: #0E7490;
+  --cyan-pii-glow: rgba(6, 182, 212, 0.4);
+
+  --amber-warning: #F59E0B;
+  --amber-dark: #78350F;
+  --amber-glow: rgba(245, 158, 11, 0.4);
+
+  --rose-danger: #F43F5E;
+  --rose-dark: #881337;
+  --rose-glow: rgba(244, 63, 94, 0.4);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+}

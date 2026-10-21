@@ -1,0 +1,361 @@
+/* ==========================================================================
+   RecallOS — 3D Tactile Mechanical Glass Component Engine
+   Features:
+     - 3D Extruded Physical Keycap Buttons (4px Depression Travel)
+     - 0.0px Layout Drift & Zero Screen Coordinate Displacement
+     - Dynamic Holographic Cursor Spotlight Sheen (.cursor-sheen)
+     - 3D Recessed Rocker Switches & Volumetric Glass Slabs
+     - Dual-Tone Keycap Actuation Aesthetics
+   ========================================================================== */
+
+@import url('tokens.css');
+
+/* ==========================================================================
+   1. 3D MECHANICAL EXTRUDED BUTTONS
+   ========================================================================== */
+
+.btn-3d {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  user-select: none;
+  border-radius: var(--radius-md);
+  transform: translateY(0);
+  will-change: transform, box-shadow;
+  transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.1s cubic-bezier(0.2, 0.8, 0.2, 1),
+              background 0.15s ease;
+}
+
+/* 1A. NVIDIA Cyber Green 3D Button */
+.btn-3d-nvidia {
+  padding: 10px 22px;
+  font-size: 0.88rem;
+  color: #000000;
+  background: linear-gradient(180deg, var(--nvidia-green-bright) 0%, var(--nvidia-green) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 5px 0 var(--nvidia-green-dark),
+    0 10px 20px rgba(0, 0, 0, 0.65),
+    0 0 20px var(--nvidia-green-glow);
+}
+
+.btn-3d-nvidia:hover {
+  background: linear-gradient(180deg, #9DF700 0%, #85D100 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 7px 0 var(--nvidia-green-dark),
+    0 14px 24px rgba(0, 0, 0, 0.75),
+    0 0 28px var(--nvidia-green-glow);
+}
+
+.btn-3d-nvidia:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.3) inset,
+    0 2px 0 var(--nvidia-green-dark),
+    0 5px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* 1B. Nebius Violet 3D Button */
+.btn-3d-violet {
+  padding: 10px 22px;
+  font-size: 0.88rem;
+  color: #FFFFFF;
+  background: linear-gradient(180deg, var(--nebius-violet-bright) 0%, var(--nebius-violet) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 5px 0 var(--nebius-violet-dark),
+    0 10px 20px rgba(0, 0, 0, 0.65),
+    0 0 20px var(--nebius-violet-glow);
+}
+
+.btn-3d-violet:hover {
+  background: linear-gradient(180deg, #9DA6FF 0%, #7075FF 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 7px 0 var(--nebius-violet-dark),
+    0 14px 24px rgba(0, 0, 0, 0.75),
+    0 0 28px var(--nebius-violet-glow);
+}
+
+.btn-3d-violet:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 2px 0 var(--nebius-violet-dark),
+    0 5px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* 1C. Smoky Titanium Glass 3D Button */
+.btn-3d-glass {
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #FFFFFF;
+  background: linear-gradient(180deg, rgba(55, 55, 55, 0.9) 0%, rgba(26, 26, 26, 0.95) 100%);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.3) inset,
+    0 5px 0 #101010,
+    0 8px 18px rgba(0, 0, 0, 0.65);
+}
+
+.btn-3d-glass:hover {
+  background: linear-gradient(180deg, rgba(70, 70, 70, 0.95) 0%, rgba(35, 35, 35, 1) 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.45) inset,
+    0 7px 0 #101010,
+    0 12px 22px rgba(0, 0, 0, 0.75);
+}
+
+.btn-3d-glass:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 2px 0 #101010,
+    0 4px 8px rgba(0, 0, 0, 0.85);
+}
+
+/* 1D. Emergency Purge / Rose Danger 3D Button */
+.btn-3d-danger {
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: linear-gradient(180deg, #FB7185 0%, var(--rose-danger) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 5px 0 var(--rose-dark),
+    0 8px 18px rgba(0, 0, 0, 0.7),
+    0 0 16px rgba(244, 63, 94, 0.35);
+}
+
+.btn-3d-danger:hover {
+  background: linear-gradient(180deg, #FDA4AF 0%, #E11D48 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 7px 0 var(--rose-dark),
+    0 12px 22px rgba(0, 0, 0, 0.8),
+    0 0 24px rgba(244, 63, 94, 0.5);
+}
+
+.btn-3d-danger:active {
+  transform: translateY(3px);
+  box-shadow: 
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 2px 0 var(--rose-dark),
+    0 4px 8px rgba(0, 0, 0, 0.85);
+}
+
+/* ==========================================================================
+   2. VOLUMETRIC GLASS CARDS & CURSOR SPOTLIGHT SHEEN
+   ========================================================================== */
+
+.card-3d-slab {
+  position: relative;
+  background: var(--smoky-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: 
+    0 20px 44px rgba(0, 0, 0, 0.7),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-3d-slab:hover {
+  border-color: var(--glass-border-highlight);
+  box-shadow: 
+    0 26px 54px rgba(0, 0, 0, 0.85),
+    0 0 25px rgba(118, 185, 0, 0.08),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+}
+
+.cursor-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle 480px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.03) 30%,
+    transparent 65%
+  );
+  opacity: var(--sheen-opacity, 0);
+  mix-blend-mode: overlay;
+  transition: opacity 0.2s ease;
+  z-index: 5;
+}
+
+/* ==========================================================================
+   3. FLOATING CONTROLS ISLAND (Stable 2D Screen Dock)
+   ========================================================================== */
+
+.floating-controls-island {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 20px;
+  background: var(--smoky-glass-dark);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-lg);
+  box-shadow: 
+    0 16px 36px rgba(0, 0, 0, 0.85),
+    0 0 1px rgba(255, 255, 255, 0.3) inset,
+    0 0 20px rgba(118, 185, 0, 0.08);
+}
+
+/* ==========================================================================
+   4. 3D ROCKER SWITCHES
+   ========================================================================== */
+
+.switch-3d {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  user-select: none;
+}
+
+.switch-3d input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-3d {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: #111111;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    inset 0 4px 8px rgba(0, 0, 0, 0.9),
+    0 1px 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider-3d::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #909090 100%);
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+input:checked + .slider-3d {
+  background: #1C3304;
+  border-color: var(--nvidia-green);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.6), 0 0 14px var(--nvidia-green-glow);
+}
+
+input:checked + .slider-3d::before {
+  transform: translateX(24px);
+  background: linear-gradient(180deg, #B5FF1A 0%, var(--nvidia-green) 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.8), 0 0 10px var(--nvidia-green-glow);
+}
+
+/* ==========================================================================
+   5. 3D PILL BADGES & CITATION CHIPS
+   ========================================================================== */
+
+.pill-3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(28, 28, 28, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.pill-3d.green {
+  border-color: var(--nvidia-green);
+  color: var(--nvidia-green-bright);
+  box-shadow: 0 4px 14px rgba(118, 185, 0, 0.3);
+}
+
+.pill-3d.violet {
+  border-color: var(--nebius-violet);
+  color: var(--nebius-violet-bright);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+.pill-3d.cyan {
+  border-color: var(--cyan-pii);
+  color: var(--cyan-pii-bright);
+  font-family: var(--font-mono);
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+}
+
+.pill-3d.amber {
+  border-color: var(--amber-warning);
+  color: var(--amber-warning);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+
+/* 3D Grounded Memory Citation Chip */
+.memory-chip-3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid rgba(118, 185, 0, 0.4);
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #1B3802, 0 6px 12px rgba(0,0,0,0.6);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.memory-chip-3d:hover {
+  transform: translateY(-2px);
+  border-color: var(--nvidia-green-bright);
+  box-shadow: 0 6px 0 #1B3802, 0 8px 16px rgba(118, 185, 0, 0.25);
+}
+
+.memory-chip-3d:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #1B3802, 0 3px 6px rgba(0,0,0,0.8);
+}

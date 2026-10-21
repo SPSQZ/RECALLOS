@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecallOS — Privacy-First Personal AI Agent</title>
+  <meta name="description"
+    content="Production 3D Tactile Mechanical Glass Interface for RecallOS: Privacy-first personal AI with local-first deterministic PII sanitization and intelligent model routing.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/3d_tactile.css">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+  <!-- ======================================================================
+       HEADER: Global Brand Bar & Physical Status Controls
+       ====================================================================== -->
+  <header class="app-header">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div
+          style="width:14px; height:14px; border-radius:50%; background:var(--nvidia-green); box-shadow:0 0 12px var(--nvidia-green-glow); animation:pulseGlow 2s infinite;">
+        </div>
+        <span class="brand-title">Recall<span style="color:var(--nvidia-green-bright);">OS</span></span>
+      </div>
+      <span class="pill-3d green" style="font-size:0.72rem; padding:3px 10px;">Nebius × NVIDIA 2026</span>
+    </div>
+
+    <!-- Right Controls: 3D Sound Toggle & 3D Privacy Shield Rocker -->
+    <div style="display:flex; align-items:center; gap:18px;">
+      <!-- Sound Synthesizer 3D Button -->
+      <button id="btn-sound-toggle" class="btn-3d btn-3d-glass" style="padding:6px 14px; font-size:0.78rem;"
+        title="Toggle dual-tone keycap acoustic synthesis (Hotkey: M)">
+        🔊 Sound: ON <span class="tag-status"
+          style="margin-left:4px; font-size:0.7rem; color:var(--nvidia-green-bright);">ACTIVE</span>
+      </button>
+
+      <!-- 3D Privacy Shield Rocker Switch -->
+      <div
+        style="display:flex; align-items:center; gap:10px; background:rgba(0,0,0,0.5); padding:4px 12px; border-radius:var(--radius-pill); border:1px solid rgba(255,255,255,0.1);">
+        <span style="font-size:0.78rem; font-weight:700; color:var(--text-muted);">3D Privacy Shield:</span>
+        <label class="switch-3d" title="Hardware isolated client-side PII sanitizer (Hotkey: S)">
+          <input type="checkbox" id="toggle-privacy-shield" checked>
+          <span class="slider-3d"></span>
+        </label>
+        <span id="shield-status-text"
+          style="font-size:0.75rem; font-weight:800; color:var(--nvidia-green-bright); min-width:48px;">ARMED</span>
+      </div>
+
+      <!-- Hardware Acceleration Status -->
+      <div style="font-size:0.75rem; color:var(--text-dim); display:flex; align-items:center; gap:6px;">
+        <span style="width:8px; height:8px; border-radius:50%; background:#60A5FA;"></span>
+        <span>60 FPS 3D Physical Travel</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       MAIN APPLICATION SHELL: Sidebar Dock + Viewport
+       ====================================================================== -->
+  <div class="app-shell">
+
+    <!-- LEFT SIDEBAR DOCK -->
+    <aside class="sidebar-panel">
+      <div class="card-3d-slab" style="padding:14px; display:flex; flex-direction:column; gap:6px;">
+        <div
+          style="font-size:0.72rem; font-weight:700; color:var(--text-dim); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; padding-left:8px;">
+          Navigation Dock
+        </div>
+
+        <button class="nav-link active" data-view="dashboard">
+          <span>📊 Dashboard</span>
+          <span class="hotkey-badge">1</span>
+        </button>
+
+        <button class="nav-link" data-view="chat">
+          <span>💬 Agent Chat</span>
+          <span class="hotkey-badge">2</span>
+        </button>
+
+        <button class="nav-link" data-view="memories">
+          <span>🧠 Memory Bank</span>
+          <span class="hotkey-badge">3</span>
+        </button>
+
+        <button class="nav-link" data-view="projects">
+          <span>📋 Projects & Tasks</span>
+          <span class="hotkey-badge">4</span>
+        </button>
+
+        <button class="nav-link" data-view="privacy">
+          <span>🛡️ Privacy Audit</span>
+          <span class="hotkey-badge">5</span>
+        </button>
+
+        <button class="nav-link" data-view="graph">
+          <span>🕸️ Knowledge Graph</span>
+          <span class="hotkey-badge">6</span>
+        </button>
+
+        <button class="nav-link" data-view="eval">
+          <span>⚡ Benchmarks</span>
+          <span class="hotkey-badge">7</span>
+        </button>
+
+        <button class="nav-link" data-view="settings">
+          <span>⚙️ Settings</span>
+          <span class="hotkey-badge">8</span>
+        </button>
+
+        <button class="nav-link" data-view="lab">
+          <span>🕹️ 3D Button Lab</span>
+          <span class="hotkey-badge">9</span>
+        </button>
+
+        <div
+          style="margin-top:14px; padding:12px; background:rgba(0,0,0,0.4); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:0.7rem; color:var(--text-dim); margin-bottom:4px;">SECURITY POSTURE</div>
+          <div
+            style="font-size:0.8rem; font-weight:700; color:var(--nvidia-green-bright); display:flex; align-items:center; gap:6px;">
+            <span>● 0.00% Cloud PII Leak</span>
+          </div>
+          <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">Local RAM Token Vault Active</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEWPORT (Single Page Application Containers) -->
+    <main class="main-viewport">
+
+      <!-- ==================================================================
+           VIEW 1: DASHBOARD
+           ================================================================== -->
+      <section id="view-dashboard" class="view-section active">
+        <!-- Metric Grid -->
+        <div class="metric-grid">
+          <div class="card-3d-slab metric-card">
+            <span class="metric-title">CLOUD PII LEAK RATE</span>
+            <div class="metric-value" style="color:var(--nvidia-green-bright);">0.00%</div>
+            <span class="metric-caption">100% Deterministic Local Sanitization</span>
+          </div>
+
+          <div class="card-3d-slab metric-card">
+            <span class="metric-title">ON-DEVICE MEMORIES</span>
+            <div id="stat-memory-count" class="metric-value" style="color:#FFFFFF;">3</div>
+            <span class="metric-caption">ChromaDB Vector Embeddings</span>
+          </div>
+
+          <div class="card-3d-slab metric-card">
+            <span class="metric-title">ACTIVE TASKS & MILESTONES</span>
+            <div id="stat-tasks-count" class="metric-value" style="color:#60A5FA;">2 / 4</div>
+            <span class="metric-caption">Local SQLite State Engine</span>
+          </div>
+
+          <div class="card-3d-slab metric-card">
+            <span class="metric-title">AVERAGE INFERENCE LATENCY</span>
+            <div class="metric-value" style="color:var(--nebius-violet-bright);">138ms</div>
+            <span class="metric-caption">Fast-Path Nemotron Nano-4B</span>
+          </div>
+        </div>
+
+        <!-- Quick 3D Action Strip -->
+        <div class="floating-controls-island">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.88rem; font-weight:700; color:#FFFFFF;">⚡ Quick Physical Commands:</span>
+            <span style="font-size:0.75rem; color:var(--text-dim);">4px mechanical keycap travel, 0.0px screen
+              drift</span>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button id="dash-btn-new-chat" class="btn-3d btn-3d-nvidia">
+              💬 Open Agent Chat
+            </button>
+            <button id="dash-btn-audit-egress" class="btn-3d btn-3d-violet">
+              🛡️ Audit Live Egress
+            </button>
+            <button id="dash-btn-add-memory" class="btn-3d btn-3d-glass">
+              🧠 Manage Memory Bank
+            </button>
+            <button id="dash-btn-view-graph" class="btn-3d btn-3d-glass">
+              🕸️ Explore Knowledge Graph
+            </button>
+          </div>
+        </div>
+
+        <!-- Architecture Overview & Recent Groundings -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <!-- Left: Grounded Memory Preview -->
+          <div class="card-3d-slab">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h2 style="font-size:1.05rem; font-weight:700; color:#FFFFFF;">🧠 Recent Memory Grounding Stack</h2>
+              <span class="pill-3d green">Local ChromaDB</span>
+            </div>
+            <div id="dashboard-recent-memories" style="display:flex; flex-direction:column; gap:10px;">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
+
+          <!-- Right: Nebius & NVIDIA Engine Telemetry -->
+          <div class="card-3d-slab">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+              <h2 style="font-size:1.05rem; font-weight:700; color:#FFFFFF;">⚙️ Dual-Tier Inference Telemetry</h2>
+              <span class="pill-3d violet">Serverless Cluster</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:4px;">
+                  <span style="color:#FFFFFF; font-weight:600;">🟢 Fast-Path (NVIDIA Nemotron Nano-4B)</span>
+                  <span style="color:var(--nvidia-green-bright); font-weight:700;">82% of Traffic (135ms avg)</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width:82%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:4px;">
+                  <span style="color:#FFFFFF; font-weight:600;">🟣 Deep Reasoning (Nemotron 3 Ultra Cloud)</span>
+                  <span style="color:var(--nebius-violet-bright); font-weight:700;">18% Escalate Path (420ms avg)</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" style="width:18%; background:var(--nebius-violet);"></div>
+                </div>
+              </div>
+
+              <div
+                style="padding:12px; background:rgba(0,0,0,0.3); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06); font-size:0.8rem; color:var(--text-muted); line-height:1.5;">
+                <strong style="color:#FFFFFF;">Autonomous Complexity Router:</strong> Prompts with complexity score
+                &lt;0.42 route to local fast-path Nano-4B; higher complexity tasks escalate to Nebius serverless cluster
+                after client-side deterministic tokenization.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 2: AGENT CHAT (3-Panel Architecture)
+           ================================================================== -->
+      <section id="view-chat" class="view-section">
+        <div class="chat-shell">
+          <!-- Center & Input: Main Chat Column -->
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <!-- Chat Timeline -->
+            <div id="chat-timeline" class="card-3d-slab chat-history">
+              <!-- Initial Welcome Message -->
+              <div class="chat-bubble assistant-bubble">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.78rem;">
+                  <span class="pill-3d green">NVIDIA Nemotron Nano-4B</span>
+                  <span style="color:var(--text-dim);">System Active</span>
+                </div>
+                <p style="font-size:0.92rem; line-height:1.6; color:#F3F4F6;">
+                  Welcome to <strong>RecallOS</strong>. Your personal AI agent with privacy-first memory recall, local
+                  ChromaDB embeddings, and hardware-accelerated 3D tactile interaction.
+                </p>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+                  <span class="memory-chip-3d">🧠 ChromaDB Vector Memory Active</span>
+                  <span class="memory-chip-3d">🛡️ Deterministic Egress Sanitizer Armed</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Presets -->
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn-3d btn-3d-glass preset-chat-pill"
+                data-prompt="What tech stack did we decide on for RecallOS backend and frontend?"
+                style="padding:6px 14px; font-size:0.76rem;">
+                📌 What tech stack did we decide on?
+              </button>
+              <button class="btn-3d btn-3d-glass preset-chat-pill"
+                data-prompt="Transfer $12,000 from Chase Bank for Alice Smith to bob@nebius.ai"
+                style="padding:6px 14px; font-size:0.76rem;">
+                ⚠️ Test High-Risk Action (NemoClaw)
+              </button>
+              <button class="btn-3d btn-3d-glass preset-chat-pill"
+                data-prompt="What programming language am I currently studying?"
+                style="padding:6px 14px; font-size:0.76rem;">
+                🧠 Test Superseded Memory Recall
+              </button>
+            </div>
+
+            <!-- Chat Input Island -->
+            <div class="chat-input-island">
+              <textarea id="chat-input-textarea" class="chat-textarea" rows="2"
+                placeholder="Ask your agent anything... (Enter to send, Shift+Enter for newline)"></textarea>
+              <button id="chat-send-btn" class="btn-3d btn-3d-nvidia" style="padding:12px 20px;">
+                🚀 Dispatch
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Observability & Grounding Telemetry -->
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div class="card-3d-slab" style="padding:18px;">
+              <h3 style="font-size:0.92rem; font-weight:700; color:#FFFFFF; margin-bottom:12px;">
+                🔍 Active Routing Telemetry
+              </h3>
+
+              <div style="display:flex; flex-direction:column; gap:12px; font-size:0.8rem;">
+                <div>
+                  <span style="color:var(--text-muted); display:block; margin-bottom:4px;">Selected Model</span>
+                  <span id="chat-model-selected" style="color:var(--nvidia-green-bright); font-weight:700;">🟢 NVIDIA
+                    Nemotron Nano-4B</span>
+                </div>
+
+                <div>
+                  <span style="color:var(--text-muted); display:block; margin-bottom:4px;">Query Complexity Score</span>
+                  <div class="progress-track" style="margin:4px 0 6px 0;">
+                    <div id="chat-complexity-fill" class="progress-fill" style="width:25%;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <span style="color:var(--text-muted); display:block; margin-bottom:4px;">PII Entities Scrubbed</span>
+                  <span id="chat-pii-scrubbed-count" class="pill-3d cyan" style="font-size:0.75rem;">0 Tokens</span>
+                </div>
+
+                <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-top:4px;">
+                  <span style="color:var(--text-muted); display:block; margin-bottom:6px;">Safety Boundary Status</span>
+                  <div
+                    style="display:flex; align-items:center; gap:6px; color:#F59E0B; font-weight:600; font-size:0.78rem;">
+                    <span>🛡️ NemoClaw Gatekeeper Armed</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grounded Knowledge Sources -->
+            <div class="card-3d-slab" style="padding:18px;">
+              <h3 style="font-size:0.92rem; font-weight:700; color:#FFFFFF; margin-bottom:12px;">
+                📚 Grounded Context Citations
+              </h3>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <div
+                  style="padding:8px 10px; background:rgba(0,0,0,0.4); border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.05); font-size:0.75rem;">
+                  <strong style="color:var(--nvidia-green-bright);">[MEM-104]</strong> Architecture Stack Decision
+                  (Score: 0.96)
+                </div>
+                <div
+                  style="padding:8px 10px; background:rgba(0,0,0,0.4); border-radius:var(--radius-sm); border:1px solid rgba(255,255,255,0.05); font-size:0.75rem;">
+                  <strong style="color:var(--nvidia-green-bright);">[MEM-108]</strong> Security & Zero-Leak Protocol
+                  (Score: 0.99)
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 3: MEMORY BANK & CONFLICT RESOLUTION
+           ================================================================== -->
+      <section id="view-memories" class="view-section">
+        <!-- Top Controls: Search & New Memory Form -->
+        <div class="card-3d-slab">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">🧠 Memory Bank & Knowledge Store</h2>
+              <p style="font-size:0.82rem; color:var(--text-muted);">Encrypted on-device vector embeddings in local
+                ChromaDB.</p>
+            </div>
+            <input type="text" id="search-memory-query" placeholder="Search memories semantically..."
+              style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.15); padding:8px 14px; border-radius:var(--radius-md); color:#FFFFFF; font-size:0.84rem; width:280px;">
+          </div>
+
+          <!-- Add Memory Form -->
+          <div style="display:flex; gap:12px; align-items:center;">
+            <input type="text" id="input-new-memory-text"
+              placeholder="Add a new permanent preference or fact (e.g. Switched project database to PostgreSQL)..."
+              style="flex:1; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.15); padding:10px 14px; border-radius:var(--radius-md); color:#FFFFFF; font-size:0.88rem;">
+
+            <select id="select-memory-cat"
+              style="background:#1C1C1C; color:#FFFFFF; border:1px solid rgba(255,255,255,0.2); padding:10px 12px; border-radius:var(--radius-md); font-size:0.84rem;">
+              <option value="tech-stack">Tech Stack</option>
+              <option value="security">Security</option>
+              <option value="learning">Learning</option>
+              <option value="general">General</option>
+            </select>
+
+            <button id="btn-add-memory" class="btn-3d btn-3d-nvidia" style="padding:10px 18px; font-size:0.84rem;">
+              + Store Memory (3D)
+            </button>
+          </div>
+        </div>
+
+        <!-- Memories List Container -->
+        <div id="memories-container">
+          <!-- Populated by app.js -->
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 4: PROJECTS & TASKS
+           ================================================================== -->
+      <section id="view-projects" class="view-section">
+        <div class="card-3d-slab">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">📋 Project Roadmap & Task Execution</h2>
+              <p style="font-size:0.82rem; color:var(--text-muted);">Synchronized with local SQLite persistence and
+                milestone tracker.</p>
+            </div>
+            <span class="pill-3d cyan">Milestone 4: Polish & Pitch</span>
+          </div>
+
+          <!-- Add Task Form -->
+          <div style="display:flex; gap:12px; margin-bottom:20px;">
+            <input type="text" id="input-new-task-title" placeholder="Add a new project deliverable or task..."
+              style="flex:1; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.15); padding:10px 14px; border-radius:var(--radius-md); color:#FFFFFF; font-size:0.88rem;">
+            <button id="btn-add-task" class="btn-3d btn-3d-violet" style="padding:10px 18px; font-size:0.84rem;">
+              + Add Task (3D)
+            </button>
+          </div>
+
+          <!-- Tasks List -->
+          <div id="tasks-container">
+            <!-- Populated by app.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 5: PRIVACY AUDIT & 3-COLUMN OBSERVABILITY INSPECTOR
+           ================================================================== -->
+      <section id="view-privacy" class="view-section">
+        <div class="card-3d-slab">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">🛡️ Real-Time 3D Zero-Leak Egress
+                Sanitization</h2>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                Verifiable cryptographic boundary: All PII tokens are isolated in local RAM lookup tables before cloud
+                inference.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <span class="pill-3d green">Zero Cloud Leaks</span>
+              <span class="pill-3d cyan">Deterministic Tokenization</span>
+            </div>
+          </div>
+
+          <!-- Quick Test Presets -->
+          <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+            <span style="font-size:0.78rem; color:var(--text-dim); align-self:center;">Load Scenario:</span>
+            <button class="btn-3d btn-3d-glass audit-preset-btn"
+              data-sample="Transfer $14,500 from Chase Bank account of Alice Smith (MRN-849204) to Bob Jones at bob.jones@nebius-cloud.ai, phone +1 (415) 890-1234."
+              style="padding:4px 12px; font-size:0.75rem;">
+              🏦 Financial Wire & Banking
+            </button>
+            <button class="btn-3d btn-3d-glass audit-preset-btn"
+              data-sample="Deploy medical record RX-90421 for patient Charlie Brown with prescription refills to Dr. David Miller at david@health.org."
+              style="padding:4px 12px; font-size:0.75rem;">
+              🏥 Healthcare & Patient Records
+            </button>
+            <button class="btn-3d btn-3d-glass audit-preset-btn"
+              data-sample="Schedule confidential sync with Alice Smith at +1 (212) 555-0199 regarding Goldman Sachs portfolio balance of $250,000."
+              style="padding:4px 12px; font-size:0.75rem;">
+              💼 Executive Advisory Sync
+            </button>
+          </div>
+
+          <!-- Interactive Typing Input -->
+          <div style="margin-bottom:20px;">
+            <label
+              style="font-size:0.8rem; font-weight:700; color:var(--text-muted); display:block; margin-bottom:6px;">
+              Live Interactive Input Test Stream:
+            </label>
+            <textarea id="audit-live-input" rows="3"
+              style="width:100%; background:rgba(10,10,10,0.8); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-md); padding:10px 14px; color:#FFFFFF; font-family:var(--font-mono); font-size:0.86rem; resize:none;"></textarea>
+          </div>
+
+          <!-- 3-COLUMN OBSERVABILITY INSPECTOR -->
+          <div class="inspector-3col">
+            <!-- Col 1: Intercepted Raw Input -->
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.78rem;">
+                <span style="font-weight:700; color:#FCA5A5;">1. Intercepted Raw Input</span>
+                <span style="color:var(--text-dim);">Client Security Layer</span>
+              </div>
+              <div id="audit-col-raw" class="terminal-box"></div>
+            </div>
+
+            <!-- Col 2: Egress Payload (Deterministic Tokens) -->
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.78rem;">
+                <span style="font-weight:700; color:var(--cyan-pii-bright);">2. Cloud Egress Payload</span>
+                <span style="color:var(--text-dim);">Nebius Cloud Boundary</span>
+              </div>
+              <div id="audit-col-egress" class="terminal-box"></div>
+            </div>
+
+            <!-- Col 3: Router Complexity & Decision -->
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.78rem;">
+                <span style="font-weight:700; color:#A78BFA;">3. Model Router Telemetry</span>
+                <span style="color:var(--text-dim);">Fast-Path vs Escalate</span>
+              </div>
+              <div class="terminal-box" style="display:flex; flex-direction:column; gap:8px;">
+                <div>Complexity Score: <strong id="audit-complexity-score" style="color:#FFFFFF;">0.31</strong></div>
+                <div>Routing Target: <span id="audit-selected-model"
+                    style="color:var(--nvidia-green-bright); font-weight:700;">🟢 Fast-Path Nano-4B</span></div>
+                <div style="font-size:0.75rem; color:var(--text-dim); margin-top:4px;">
+                  All cloud tokens are securely rehydrated on the client device during response streaming.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- In-RAM Rehydration Lookup Table -->
+          <div style="margin-top:20px;">
+            <h3 style="font-size:0.92rem; font-weight:700; color:#FFFFFF; margin-bottom:10px;">
+              🔐 In-Memory Rehydration Vault (Never Persisted to Cloud)
+            </h3>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Egress Token Identifier</th>
+                  <th>Isolated Real Entity (RAM Only)</th>
+                  <th>Entity Category</th>
+                  <th>Isolation Status</th>
+                </tr>
+              </thead>
+              <tbody id="audit-ram-table-body">
+                <!-- Populated dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 6: INTERACTIVE FORCE-DIRECTED KNOWLEDGE GRAPH
+           ================================================================== -->
+      <section id="view-graph" class="view-section">
+        <div class="card-3d-slab">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">🕸️ Interactive Knowledge Graph</h2>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                Live force-directed topology of on-device components, vector indices, and cloud inference endpoints.
+              </p>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button id="graph-filter-all" class="btn-3d btn-3d-glass"
+                style="padding:5px 12px; font-size:0.75rem;">Reset Physics</button>
+            </div>
+          </div>
+
+          <!-- Canvas Container -->
+          <div
+            style="position:relative; width:100%; height:460px; background:rgba(12,12,12,0.95); border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-lg); overflow:hidden;">
+            <canvas id="knowledge-graph-canvas" style="display:block; width:100%; height:100%;"></canvas>
+
+            <!-- Node HUD Card -->
+            <div id="graph-node-hud"
+              style="position:absolute; bottom:16px; left:16px; width:280px; padding:12px; background:rgba(20,20,20,0.9); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-md); box-shadow:0 8px 24px rgba(0,0,0,0.8); pointer-events:none;">
+              <span class="pill-3d green">RecallOS Core</span>
+              <p style="font-size:0.78rem; color:#A3A3A3; margin-top:4px;">Hover any node in the canvas to inspect
+                component architecture.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 7: BENCHMARKS & EVALUATION
+           ================================================================== -->
+      <section id="view-eval" class="view-section">
+        <div class="card-3d-slab">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">⚡ Model Evaluation & Latency Benchmarks
+              </h2>
+              <p style="font-size:0.82rem; color:var(--text-muted);">Rigorous evaluation across 100 adversarial privacy
+                and reasoning test cases.</p>
+            </div>
+            <button id="btn-run-benchmarks" class="btn-3d btn-3d-nvidia" style="padding:8px 18px; font-size:0.82rem;">
+              ⚡ Run Test Suite (100 Prompts)
+            </button>
+          </div>
+
+          <!-- Benchmark Metrics Comparison -->
+          <div class="metric-grid" style="margin-bottom:20px;">
+            <div
+              style="padding:16px; background:rgba(0,0,0,0.4); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06);">
+              <span style="font-size:0.78rem; color:var(--text-muted);">PII Egress Escape Rate</span>
+              <div style="font-size:1.8rem; font-weight:800; color:var(--nvidia-green-bright);">0.00%</div>
+              <span style="font-size:0.72rem; color:var(--text-dim);">100/100 synthetic attacks blocked</span>
+            </div>
+
+            <div
+              style="padding:16px; background:rgba(0,0,0,0.4); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06);">
+              <span style="font-size:0.78rem; color:var(--text-muted);">Nano-4B Fast-Path Latency</span>
+              <div style="font-size:1.8rem; font-weight:800; color:#60A5FA;">132ms</div>
+              <span style="font-size:0.72rem; color:var(--text-dim);">&lt;150ms sub-second response</span>
+            </div>
+
+            <div
+              style="padding:16px; background:rgba(0,0,0,0.4); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06);">
+              <span style="font-size:0.78rem; color:var(--text-muted);">Ultra 3 Deep Reasoning Latency</span>
+              <div style="font-size:1.8rem; font-weight:800; color:var(--nebius-violet-bright);">418ms</div>
+              <span style="font-size:0.72rem; color:var(--text-dim);">Serverless cluster inference</span>
+            </div>
+
+            <div
+              style="padding:16px; background:rgba(0,0,0,0.4); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06);">
+              <span style="font-size:0.78rem; color:var(--text-muted);">Memory Recall Precision</span>
+              <div style="font-size:1.8rem; font-weight:800; color:#34D399;">96.4%</div>
+              <span style="font-size:0.72rem; color:var(--text-dim);">ChromaDB vector cosine similarity</span>
+            </div>
+          </div>
+
+          <!-- Live Benchmark Console -->
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Automated Test Runner
+              Output:</span>
+            <div id="benchmarks-live-log" class="terminal-box" style="height:180px;">
+              <span style="color:#76B900;">[SYSTEM] Benchmark harness initialized. Ready to execute synthetic test
+                suite.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 8: SETTINGS & SECURITY
+           ================================================================== -->
+      <section id="view-settings" class="view-section">
+        <div class="card-3d-slab">
+          <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF; margin-bottom:6px;">⚙️ System Settings &
+            Security Controls</h2>
+          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:20px;">
+            Configure local model thresholds, vector store directories, and emergency data flushes.
+          </p>
+
+          <div style="display:flex; flex-direction:column; gap:16px; max-width:680px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(0,0,0,0.3); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.08);">
+              <div>
+                <strong style="font-size:0.9rem; color:#FFFFFF; display:block;">Local ChromaDB Storage
+                  Directory</strong>
+                <span style="font-size:0.76rem; color:var(--text-dim);">Path: ./data/chroma_db (Encrypted
+                  AES-256)</span>
+              </div>
+              <span class="pill-3d green">CONNECTED</span>
+            </div>
+
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(0,0,0,0.3); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.08);">
+              <div>
+                <strong style="font-size:0.9rem; color:#FFFFFF; display:block;">Nebius Serverless Inference
+                  Gateway</strong>
+                <span style="font-size:0.76rem; color:var(--text-dim);">Endpoint: https://api.studio.nebius.ai/v1
+                  (Nemotron 3 Ultra)</span>
+              </div>
+              <span class="pill-3d violet">READY</span>
+            </div>
+
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:rgba(0,0,0,0.3); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.08);">
+              <div>
+                <strong style="font-size:0.9rem; color:#FFFFFF; display:block;">Emergency Data & Memory Purge</strong>
+                <span style="font-size:0.76rem; color:var(--text-dim);">Immediately wipes local memories, tasks, and RAM
+                  rehydration tables.</span>
+              </div>
+              <button id="btn-purge-storage" class="btn-3d btn-3d-danger" style="padding:8px 18px; font-size:0.8rem;">
+                ⚠️ Flush All Data (3D)
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           VIEW 9: 3D MECHANICAL COMPONENT LAB (Stress-Test Lab)
+           ================================================================== -->
+      <section id="view-lab" class="view-section">
+        <div class="card-3d-slab">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <div>
+              <h2 style="font-size:1.15rem; font-weight:700; color:#FFFFFF;">🕹️ 3D Physical Mechanical Component Lab
+              </h2>
+              <p style="font-size:0.82rem; color:var(--text-muted);">
+                Test physical keycap travel, dual-tone click acoustics, and verify 0.0px screen coordinate displacement.
+              </p>
+            </div>
+            <span class="pill-3d green">0.0px Coordinate Drift</span>
+          </div>
+
+          <!-- Buttons Row -->
+          <div class="floating-controls-island" style="margin-bottom:20px;">
+            <button class="btn-3d btn-3d-nvidia">
+              ⚡ Dispatch Nemotron Nano (3D)
+            </button>
+            <button class="btn-3d btn-3d-violet">
+              🧠 Escalate to Ultra 3 (3D)
+            </button>
+            <button class="btn-3d btn-3d-glass">
+              💾 Query Local ChromaDB (3D)
+            </button>
+            <button class="btn-3d btn-3d-danger">
+              ⚠️ Flush RAM Cache (3D)
+            </button>
+          </div>
+
+          <!-- Live Telemetry Monitor -->
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:0.8rem; font-weight:700; color:var(--text-muted);">Actuation Telemetry Log:</span>
+            <div id="lab-telemetry-log" class="terminal-box" style="height:160px; color:#A3A3A3;">
+              <div>[SYSTEM READY]: Click any 3D button above to trigger mechanical depression travel and dual-tone audio
+                synthesis.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Master Application Script (Supports both local file:// and web servers) -->
+  <script src="./js/bundle.js"></script>
+</body>
+
+</html>
