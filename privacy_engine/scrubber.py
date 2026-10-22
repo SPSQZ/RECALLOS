@@ -25,9 +25,9 @@ class PIIScrubber:
         # Tracks sequential index per EntityType
         self.counters: Dict[EntityType, int] = {etype: 0 for etype in EntityType}
 
-        # Contextual triggers for lightweight fallback NER (when spaCy is absent)
+        # Contextual triggers (case-insensitive prefix, strict Title-Case name capture)
         self._name_triggers = re.compile(
-            r"\b(?:my name is|i am|i'm|call|contact|pay|send to|transfer to|from|mr\.|ms\.|mrs\.|dr\.|with)\s+"
+            r"(?i:\b(?:my name is|i am|i'm|hey|hi|hello|dear|call|contact|pay|send to|transfer to|account to|to|from|mr\.?|ms\.?|mrs\.?|dr\.?|with))\s+"
             r"([A-Z][a-z]{1,20}(?:\s+[A-Z][a-z]{1,20})?)\b"
         )
         # Common capitalized words to ignore in fallback NER
@@ -36,7 +36,7 @@ class PIIScrubber:
             "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",
             "January", "February", "March", "April", "May", "June", "July",
             "August", "September", "October", "November", "December",
-            "RecallOS", "Nebius", "NVIDIA", "Nemotron", "Python", "Rust"
+            "RecallOS", "Nebius", "NVIDIA", "Nemotron", "Python", "Rust", "My", "Send", "Hey"
         }
 
     def _get_or_create_token(self, raw_value: str, entity_type: EntityType) -> str:
@@ -64,7 +64,6 @@ class PIIScrubber:
         # Always run contextual trigger regex to catch names missed by small NER models
         for match in self._name_triggers.finditer(text):
             candidate = match.group(1).strip()
-            # Filter out stopwords and already-redacted tokens
             words = candidate.split()
             valid_words = [w for w in words if w not in self._stopwords and not w.startswith("REDACTED")]
             if valid_words:
@@ -89,19 +88,19 @@ class PIIScrubber:
         sanitized = text
         detected_entities: List[Dict[str, str]] = []
 
-        # Step 1: Scrub structured entities via Regex (EMAIL, PHONE, AMOUNT, FINANCIAL_ORG)
-        # Order matters: EMAIL & PHONE before AMOUNT so numbers inside emails/phones aren't split
+        # Step 1: Scrub structured entities via Regex
+        # Order matters: EMAIL, PHONE, AMOUNT, FINANCIAL_ORG before CREDENTIAL so phone/amounts aren't caught as raw digits
         priority_order = [
             EntityType.EMAIL,
             EntityType.PHONE,
-            EntityType.FINANCIAL_ORG,
             EntityType.AMOUNT,
+            EntityType.FINANCIAL_ORG,
+            EntityType.CREDENTIAL,
         ]
 
         for etype in priority_order:
             pattern = REGEX_PATTERNS[etype]
             matches = list(pattern.finditer(sanitized))
-            # Sort matches by length descending to prevent partial substring collisions
             unique_matches = sorted({m.group(0) for m in matches}, key=len, reverse=True)
 
             for raw_match in unique_matches:
@@ -119,7 +118,6 @@ class PIIScrubber:
             candidate_names = sorted(set(candidate_names + custom_names), key=len, reverse=True)
 
         for name in candidate_names:
-            # Word-boundary safe replacement so we don't corrupt substrings
             name_pattern = re.compile(rf"\b{re.escape(name)}\b")
             if name_pattern.search(sanitized):
                 token = self._get_or_create_token(name, EntityType.NAME)
