@@ -1,9 +1,2 @@
-
-# Python bytecode & test caches
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-local_chromadb/
-test_chromadb/
-.env
+# Created by venv; see https://docs.python.org/3/library/venv.html
+*
