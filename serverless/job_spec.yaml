@@ -1,0 +1,22 @@
+# Nebius Serverless Job Specification
+# Ref: https://docs.nebius.com/serverless/jobs
+name: recallos-batch-profiler
+description: "RecallOS Asynchronous Batch Evaluation & Latency Profiling Job"
+spec:
+  resources:
+    cores: 1
+    memory: 2Gi
+  execution_timeout: 300s
+  env:
+    - name: NEBIUS_API_KEY
+      value_from:
+        secret_key_ref:
+          name: nebius-api-credentials
+          key: api-token
+    - name: NEBIUS_BASE_URL
+      value: "https://api.tokenfactory.nebius.com/v1/"
+    - name: MODEL_FAST
+      value: "nvidia/llama-3.1-nemotron-70b-instruct"
+    - name: MODEL_COMPLEX
+      value: "nvidia/Nemotron-3-Ultra-550b-a55b"
+
