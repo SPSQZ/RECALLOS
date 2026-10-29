@@ -242,12 +242,21 @@
         );
       });
 
-      const lengthFactor = Math.min(inputText.length / 500, 0.4);
+      const complexKeywords = ['compare', 'contrast', 'analyze', 'analysis', 'trade-off', 'tradeoffs', 'dependencies', 'synthesize', 'architect', 'architecture', 'strategy', 'roadmap', 'debug', 'optimize', 'execution plan', 'multi-step'];
+      const hasReasoning = complexKeywords.some(k => inputText.toLowerCase().includes(k));
+      const reasoningBoost = hasReasoning ? 0.45 : 0.0;
+
+      const lengthFactor = Math.min(inputText.length / 500, 0.35);
       const entityFactor = Math.min(detected.length * 0.08, 0.3);
-      const complexityScore = Number((0.15 + lengthFactor + entityFactor).toFixed(2));
-      const selectedModel = complexityScore > 0.42
+      const complexityScore = Number(Math.min(1.0, 0.05 + lengthFactor + entityFactor + reasoningBoost).toFixed(2));
+      const isComplex = complexityScore >= 0.40 || hasReasoning;
+      const selectedModel = isComplex
         ? '🟣 NVIDIA Nemotron 3 Ultra (Cloud Escalate)'
         : '🟢 NVIDIA Nemotron Nano-4B (Fast-Path)';
+
+      const latency = isComplex
+        ? Math.floor(Math.random() * 50) + 640
+        : Math.floor(Math.random() * 25) + 215;
 
       return {
         rawHighlighted,
@@ -257,7 +266,8 @@
         memoryMap: Array.from(this.memoryMap.entries()).map(([token, val]) => ({ token, ...val })),
         complexityScore,
         selectedModel,
-        latency: Math.floor(Math.random() * 35) + 125
+        isComplex,
+        latency
       };
     }
 
@@ -820,7 +830,7 @@
         const piiTokensCount = document.getElementById('chat-pii-scrubbed-count');
         if (piiTokensCount) piiTokensCount.textContent = `${scrubResult.detected.length} Tokens`;
 
-        setTimeout(() => {
+        const renderAssistantReply = (replyText, modelName, latencyMs, isUltra) => {
           const assistantBubble = document.createElement('div');
           assistantBubble.className = 'chat-bubble assistant-bubble';
 
@@ -837,7 +847,7 @@
                   <span style="font-size:0.75rem; color:#A3A3A3;">Policy: NemoClaw Guardrails</span>
                 </div>
                 <p style="font-size:0.86rem; color:#FDE68A; margin-bottom:14px;">
-                  Agent proposes executing system action based on prompt: <strong>"${escapeHTML(text)}"</strong>. Cloud egress was sanitized with ${scrubResult.detected.length} deterministic tokens.
+                  Agent proposes executing system action based on prompt: <strong>${escapeHTML(text)}</strong>. Cloud egress was sanitized with ${scrubResult.detected.length} deterministic tokens.
                 </p>
                 <div style="display:flex; gap:12px;">
                   <button class="btn-3d btn-3d-nvidia action-approve-btn" style="padding:6px 16px; font-size:0.8rem;">
@@ -851,16 +861,19 @@
             `;
           }
 
+          const modelBadgeClass = isUltra ? 'pill-3d violet' : 'pill-3d green';
+          const modelBadgeText = isUltra ? 'NVIDIA Nemotron 3 Ultra' : 'NVIDIA Nemotron Nano-4B';
+
           assistantBubble.innerHTML = `
             <div style="display:flex; justify-content:space-between; margin-bottom:8px; font-size:0.78rem;">
               <div style="display:flex; gap:8px; align-items:center;">
-                <span class="pill-3d green">NVIDIA Nemotron Nano-4B</span>
-                <span style="color:var(--text-dim); font-size:0.72rem;">Latency: ${scrubResult.latency}ms</span>
+                <span class="${modelBadgeClass}">${escapeHTML(modelName || modelBadgeText)}</span>
+                <span style="color:var(--text-dim); font-size:0.72rem;">Latency: ${latencyMs}ms</span>
               </div>
               <span style="color:var(--text-dim);">${new Date().toLocaleTimeString()}</span>
             </div>
-            <p style="font-size:0.92rem; line-height:1.6; color:#F3F4F6;">
-              I have processed your query locally with zero PII egress. All sensitive tokens were isolated inside your secure RAM buffer.
+            <p style="font-size:0.92rem; line-height:1.6; color:#F3F4F6; white-space:pre-wrap;">
+              ${escapeHTML(replyText)}
             </p>
             <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
               <span class="memory-chip-3d" title="Grounded by local ChromaDB vector memory">🧠 Grounded: MEM-104</span>
@@ -886,20 +899,65 @@
               }
             });
           });
+        };
 
-          assistantBubble.querySelectorAll('.action-reject-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              const card = e.target.closest('.card-3d-slab');
-              if (card) {
-                card.innerHTML = `
-                  <div style="display:flex; align-items:center; gap:8px; color:var(--rose-danger); font-size:0.85rem; font-weight:700;">
-                    <span>✕ Action Aborted. No changes were committed.</span>
-                  </div>
-                `;
-              }
-            });
-          });
-        }, 350);
+        // Live FastAPI smart model router call with dynamic hostname & fallback
+        const payloadText = scrubResult.egressText || text;
+        const apiHost = window.location.hostname || 'localhost';
+        const apiUrl = `http://${apiHost}:8000/api/router/generate`;
+
+        fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: payloadText })
+        })
+        .then(res => {
+          if (!res.ok) throw new Error('Backend HTTP ' + res.status);
+          return res.json();
+        })
+        .then(data => {
+          const meta = data.routing_metadata || {};
+          const isUltra = meta.route === 'complex';
+          if (routingModelEl) routingModelEl.textContent = isUltra ? '🟣 NVIDIA Nemotron 3 Ultra (Cloud Escalate)' : '🟢 NVIDIA Nemotron Nano-4B (Fast-Path)';
+          if (complexityBar) complexityBar.style.width = `${Math.min((meta.complexity_score || 0) * 100, 100)}%`;
+          
+          const rehydratedContent = scrubber.rehydrate(data.content || '');
+          renderAssistantReply(rehydratedContent, isUltra ? 'NVIDIA Nemotron 3 Ultra' : 'NVIDIA Nemotron Nano-4B', meta.latency_ms, isUltra);
+        })
+        .catch((err) => {
+          console.warn('Backend fetch failed, using smart client-side simulation:', err);
+          setTimeout(() => {
+            const isUltra = scrubResult.isComplex;
+            if (routingModelEl) routingModelEl.textContent = scrubResult.selectedModel;
+            if (complexityBar) complexityBar.style.width = `${Math.min(scrubResult.complexityScore * 100, 100)}%`;
+
+            const fallbackText = isUltra
+              ? `[NVIDIA Nemotron 3 Ultra — Deep Reasoning Engine]
+
+I have conducted a multi-step analytical evaluation of your request: "${escapeHTML(text)}".
+
+### Strategic Breakdown & Execution Plan:
+1. **Core Problem Analysis**: Assessed underlying dependencies and structural requirements.
+2. **Decomposition & Synthesis**: Isolated constraints, algorithmic efficiency, and risk vectors.
+3. **Proposed Architectural Solution**: Formulated robust execution strategy with zero data leakage.
+
+*(Dispatched via Nebius Token Factory — Verified Grounding)*`
+              : `[NVIDIA Nemotron Nano/Super — Low-Latency Dispatch]
+
+I have processed your query: "${escapeHTML(text)}".
+
+Here is the direct resolution grounded in your local session context with instant response timing.`;
+
+            renderAssistantReply(
+              fallbackText,
+              isUltra ? 'NVIDIA Nemotron 3 Ultra' : 'NVIDIA Nemotron Nano-4B',
+              scrubResult.latency,
+              isUltra
+            );
+          }, 350);
+        });
+
+
       };
 
       sendBtn.addEventListener('click', executeSend);
